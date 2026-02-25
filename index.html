@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ফ্যামিলি কার্ড</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <style>
 body{
     font-family: SolaimanLipi, Arial, sans-serif;
@@ -109,6 +111,8 @@ button{
             <p id="cardNumber"></p>
         </div>
     </div>
+
+    <button onclick="downloadCard()">ডাউনলোড করো</button>
 </div>
 
 <script>
@@ -142,6 +146,15 @@ function generateCard(){
     if(file){
         reader.readAsDataURL(file);
     }
+}
+
+function downloadCard(){
+    html2canvas(document.getElementById("familyCard")).then(canvas=>{
+        let link=document.createElement("a");
+        link.download="family_card.png";
+        link.href=canvas.toDataURL();
+        link.click();
+    });
 }
 </script>
 
