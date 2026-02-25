@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Family Card</title>
+<title>বাংলাদেশ স্মার্ট কার্ড</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 body{
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg,#141e30,#243b55);
+    background: linear-gradient(135deg,#006a4e,#f42a41);
     text-align:center;
     padding:20px;
     color:white;
@@ -19,7 +19,7 @@ body{
 .owner{
     font-size:20px;
     font-weight:bold;
-    margin-bottom:10px;
+    margin-bottom:15px;
 }
 
 .container{
@@ -40,7 +40,7 @@ input{
 button{
     padding:10px;
     width:100%;
-    background:#00c6ff;
+    background:#006a4e;
     color:white;
     border:none;
     cursor:pointer;
@@ -49,66 +49,73 @@ button{
     border-radius:5px;
 }
 
-/* Smart Card Design */
+/* CARD DESIGN */
 .card{
     margin-top:30px;
     width:420px;
-    height:240px;
+    height:250px;
     margin-left:auto;
     margin-right:auto;
-    border-radius:15px;
+    border-radius:18px;
     padding:20px;
     color:white;
     display:none;
-    background: linear-gradient(135deg,#00c6ff,#0072ff);
-    box-shadow:0 10px 25px rgba(0,0,0,0.5);
+    background: linear-gradient(135deg,#006a4e,#d32f2f);
+    box-shadow:0 15px 35px rgba(0,0,0,0.6);
     position:relative;
 }
 
 .card-title{
-    font-size:14px;
+    font-size:16px;
     font-weight:bold;
     letter-spacing:1px;
 }
 
+.chip{
+    width:60px;
+    height:45px;
+    background:gold;
+    border-radius:8px;
+    margin-top:15px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+}
+
 .card-number{
-    position:absolute;
-    top:20px;
-    right:20px;
+    margin-top:20px;
+    font-size:18px;
+    letter-spacing:3px;
+    font-weight:bold;
+}
+
+.card-details{
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
     font-size:12px;
 }
 
-.card-body{
-    display:flex;
-    margin-top:20px;
-}
-
-.card-body img{
-    width:100px;
-    height:120px;
-    border-radius:10px;
+.photo{
+    position:absolute;
+    right:20px;
+    bottom:20px;
+    width:80px;
+    height:100px;
+    border-radius:8px;
     border:2px solid white;
     object-fit:cover;
-    margin-right:15px;
-}
-
-.info p{
-    margin:5px 0;
-    font-size:13px;
 }
 
 .footer-text{
     position:absolute;
-    bottom:15px;
+    bottom:10px;
     left:20px;
     font-size:12px;
     font-style:italic;
-    opacity:0.9;
 }
 
 .download-btn{
-    margin-top:15px;
-    background:#ff9800;
+    margin-top:20px;
+    background:#f42a41;
 }
 </style>
 </head>
@@ -116,30 +123,32 @@ button{
 
 <div class="owner">Website Owner: তারিকুল</div>
 
-<h2>Smart Family Card Generator</h2>
+<h2>বাংলাদেশ স্মার্ট কার্ড জেনারেটর</h2>
 
 <div class="container">
     <input type="text" id="name" placeholder="নাম">
-    <input type="text" id="father" placeholder="পিতার নাম">
-    <input type="text" id="mother" placeholder="মাতার নাম">
-    <input type="text" id="address" placeholder="ঠিকানা">
     <input type="file" id="photo" accept="image/*">
     <button onclick="generateCard()">কার্ড তৈরি করো</button>
 </div>
 
-<div class="card" id="familyCard">
-    <div class="card-title">SMART FAMILY CARD</div>
+<div class="card" id="smartCard">
+    <div class="card-title">বাংলাদেশ স্মার্ট কার্ড</div>
+
+    <div class="chip"></div>
+
     <div class="card-number" id="cardNumber"></div>
 
-    <div class="card-body">
-        <img id="cardPhoto">
-        <div class="info">
-            <p id="cardName"></p>
-            <p id="cardFather"></p>
-            <p id="cardMother"></p>
-            <p id="cardAddress"></p>
+    <div class="card-details">
+        <div>
+            <div id="cardName"></div>
+        </div>
+        <div>
+            <div>EXP: <span id="expDate"></span></div>
+            <div>CVV: <span id="cvv"></span></div>
         </div>
     </div>
+
+    <img id="cardPhoto" class="photo">
 
     <div class="footer-text">I Have A Plan</div>
 </div>
@@ -149,23 +158,30 @@ button{
 <script>
 function generateCard(){
 
-    document.getElementById("familyCard").style.display="block";
+    document.getElementById("smartCard").style.display="block";
 
-    document.getElementById("cardName").innerText=
-    "Name: "+document.getElementById("name").value;
+    // Name
+    document.getElementById("cardName").innerText =
+    document.getElementById("name").value;
 
-    document.getElementById("cardFather").innerText=
-    "Father: "+document.getElementById("father").value;
+    // 16 Digit Card Number
+    let number="";
+    for(let i=0;i<16;i++){
+        number += Math.floor(Math.random()*10);
+        if((i+1)%4===0 && i!==15) number+=" ";
+    }
+    document.getElementById("cardNumber").innerText = number;
 
-    document.getElementById("cardMother").innerText=
-    "Mother: "+document.getElementById("mother").value;
+    // Expiry Date (MM/YY)
+    let month = ("0" + (Math.floor(Math.random()*12)+1)).slice(-2);
+    let year = Math.floor(Math.random()*5)+26;
+    document.getElementById("expDate").innerText = month+"/"+year;
 
-    document.getElementById("cardAddress").innerText=
-    "Address: "+document.getElementById("address").value;
+    // CVV
+    let cvv = Math.floor(100+Math.random()*900);
+    document.getElementById("cvv").innerText = cvv;
 
-    let randomNumber = "SFC-"+Math.floor(100000+Math.random()*900000);
-    document.getElementById("cardNumber").innerText=randomNumber;
-
+    // Photo
     let file=document.getElementById("photo").files[0];
     let reader=new FileReader();
 
@@ -179,9 +195,9 @@ function generateCard(){
 }
 
 function downloadCard(){
-    html2canvas(document.getElementById("familyCard")).then(canvas=>{
+    html2canvas(document.getElementById("smartCard")).then(canvas=>{
         let link=document.createElement("a");
-        link.download="smart_family_card.png";
+        link.download="bangladesh_smart_card.png";
         link.href=canvas.toDataURL();
         link.click();
     });
