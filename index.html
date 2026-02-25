@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>বাংলাদেশ স্মার্ট কার্ড</title>
 
+<!-- html2canvas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- JsBarcode -->
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
 
 <style>
 body{
@@ -53,7 +56,7 @@ button{
 .card{
     margin-top:30px;
     width:420px;
-    height:250px;
+    height:260px;
     margin-left:auto;
     margin-right:auto;
     border-radius:18px;
@@ -68,7 +71,6 @@ button{
 .card-title{
     font-size:16px;
     font-weight:bold;
-    letter-spacing:1px;
 }
 
 .chip{
@@ -76,28 +78,32 @@ button{
     height:45px;
     background:gold;
     border-radius:8px;
-    margin-top:15px;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    margin-top:10px;
 }
 
 .card-number{
-    margin-top:20px;
+    margin-top:15px;
     font-size:18px;
     letter-spacing:3px;
     font-weight:bold;
 }
 
-.card-details{
-    display:flex;
-    justify-content:space-between;
-    margin-top:15px;
-    font-size:12px;
+.barcode{
+    margin-top:5px;
+    background:white;
+    padding:3px;
+    border-radius:5px;
+}
+
+.details{
+    margin-top:10px;
+    font-size:13px;
 }
 
 .photo{
     position:absolute;
     right:20px;
-    bottom:20px;
+    bottom:60px;
     width:80px;
     height:100px;
     border-radius:8px;
@@ -126,26 +132,24 @@ button{
 <h2>বাংলাদেশ স্মার্ট কার্ড জেনারেটর</h2>
 
 <div class="container">
-    <input type="text" id="name" placeholder="নাম">
+    <input type="text" id="name" placeholder="নাম লিখুন">
     <input type="file" id="photo" accept="image/*">
     <button onclick="generateCard()">কার্ড তৈরি করো</button>
 </div>
 
 <div class="card" id="smartCard">
     <div class="card-title">বাংলাদেশ স্মার্ট কার্ড</div>
-
     <div class="chip"></div>
 
     <div class="card-number" id="cardNumber"></div>
 
-    <div class="card-details">
-        <div>
-            <div id="cardName"></div>
-        </div>
-        <div>
-            <div>EXP: <span id="expDate"></span></div>
-            <div>CVV: <span id="cvv"></span></div>
-        </div>
+    <div class="barcode">
+        <svg id="barcode"></svg>
+    </div>
+
+    <div class="details">
+        নাম: <span id="cardName"></span><br>
+        মেয়াদ শেষ: <span id="expiry"></span>
     </div>
 
     <img id="cardPhoto" class="photo">
@@ -161,25 +165,31 @@ function generateCard(){
     document.getElementById("smartCard").style.display="block";
 
     // Name
-    document.getElementById("cardName").innerText =
-    document.getElementById("name").value;
+    let name = document.getElementById("name").value;
+    document.getElementById("cardName").innerText = name;
 
     // 16 Digit Card Number
     let number="";
     for(let i=0;i<16;i++){
         number += Math.floor(Math.random()*10);
-        if((i+1)%4===0 && i!==15) number+=" ";
     }
-    document.getElementById("cardNumber").innerText = number;
 
-    // Expiry Date (MM/YY)
+    // Format with space
+    let formatted = number.replace(/(.{4})/g,"$1 ").trim();
+    document.getElementById("cardNumber").innerText = formatted;
+
+    // Barcode
+    JsBarcode("#barcode", number, {
+        format: "CODE128",
+        width:2,
+        height:40,
+        displayValue:false
+    });
+
+    // Random Day & Month, Year fixed 2028
+    let day = ("0" + (Math.floor(Math.random()*28)+1)).slice(-2);
     let month = ("0" + (Math.floor(Math.random()*12)+1)).slice(-2);
-    let year = Math.floor(Math.random()*5)+26;
-    document.getElementById("expDate").innerText = month+"/"+year;
-
-    // CVV
-    let cvv = Math.floor(100+Math.random()*900);
-    document.getElementById("cvv").innerText = cvv;
+    document.getElementById("expiry").innerText = day+"/"+month+"/2028";
 
     // Photo
     let file=document.getElementById("photo").files[0];
