@@ -3,25 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ফ্যামিলি কার্ড</title>
+<title>ফ্যামিলি কার্ড জেনারেটর</title>
 
+<!-- html2canvas for download -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 body{
     font-family: SolaimanLipi, Arial, sans-serif;
-    background:#f0f0f0;
+    background: linear-gradient(135deg,#006a4e,#f42a41);
     text-align:center;
     padding:20px;
+    color:white;
+}
+
+.owner{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:10px;
 }
 
 .container{
     background:white;
+    color:black;
     padding:20px;
     width:350px;
     margin:auto;
-    border-radius:8px;
-    box-shadow:0 0 10px rgba(0,0,0,0.2);
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(0,0,0,0.3);
 }
 
 input{
@@ -38,6 +47,7 @@ button{
     border:none;
     cursor:pointer;
     margin-top:10px;
+    font-weight:bold;
 }
 
 .card{
@@ -45,23 +55,25 @@ button{
     width:400px;
     margin-left:auto;
     margin-right:auto;
-    border:2px solid #006a4e;
+    border:3px solid #006a4e;
     background:white;
     padding:15px;
     display:none;
+    color:black;
+    border-radius:10px;
 }
 
 .header{
     background:#006a4e;
     color:white;
-    padding:5px;
+    padding:6px;
     font-weight:bold;
 }
 
 .sub-header{
     background:#f42a41;
     color:white;
-    padding:3px;
+    padding:4px;
     font-size:14px;
 }
 
@@ -81,10 +93,25 @@ button{
 
 .info p{
     margin:4px 0;
+    font-size:14px;
+}
+
+.footer-text{
+    margin-top:10px;
+    font-weight:bold;
+    text-align:center;
+    color:#006a4e;
+    font-size:16px;
+}
+
+.download-btn{
+    background:#f42a41;
 }
 </style>
 </head>
 <body>
+
+<div class="owner">Website Owner: তারিকুল</div>
 
 <h2>ফ্যামিলি কার্ড জেনারেটর</h2>
 
@@ -112,7 +139,9 @@ button{
         </div>
     </div>
 
-    <button onclick="downloadCard()">ডাউনলোড করো</button>
+    <div class="footer-text">I Have A Plan</div>
+
+    <button class="download-btn" onclick="downloadCard()">ডাউনলোড করো</button>
 </div>
 
 <script>
