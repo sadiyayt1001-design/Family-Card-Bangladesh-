@@ -3,15 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ফ্যামিলি কার্ড জেনারেটর</title>
+<title>Smart Family Card</title>
 
-<!-- html2canvas for download -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 body{
-    font-family: SolaimanLipi, Arial, sans-serif;
-    background: linear-gradient(135deg,#006a4e,#f42a41);
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#141e30,#243b55);
     text-align:center;
     padding:20px;
     color:white;
@@ -30,7 +29,6 @@ body{
     width:350px;
     margin:auto;
     border-radius:10px;
-    box-shadow:0 0 15px rgba(0,0,0,0.3);
 }
 
 input{
@@ -42,70 +40,75 @@ input{
 button{
     padding:10px;
     width:100%;
-    background:#006a4e;
+    background:#00c6ff;
     color:white;
     border:none;
     cursor:pointer;
     margin-top:10px;
     font-weight:bold;
+    border-radius:5px;
 }
 
+/* Smart Card Design */
 .card{
-    margin-top:20px;
-    width:400px;
+    margin-top:30px;
+    width:420px;
+    height:240px;
     margin-left:auto;
     margin-right:auto;
-    border:3px solid #006a4e;
-    background:white;
-    padding:15px;
+    border-radius:15px;
+    padding:20px;
+    color:white;
     display:none;
-    color:black;
-    border-radius:10px;
+    background: linear-gradient(135deg,#00c6ff,#0072ff);
+    box-shadow:0 10px 25px rgba(0,0,0,0.5);
+    position:relative;
 }
 
-.header{
-    background:#006a4e;
-    color:white;
-    padding:6px;
-    font-weight:bold;
-}
-
-.sub-header{
-    background:#f42a41;
-    color:white;
-    padding:4px;
+.card-title{
     font-size:14px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.card-number{
+    position:absolute;
+    top:20px;
+    right:20px;
+    font-size:12px;
 }
 
 .card-body{
     display:flex;
-    margin-top:10px;
-    text-align:left;
+    margin-top:20px;
 }
 
 .card-body img{
-    width:110px;
+    width:100px;
     height:120px;
-    border:1px solid black;
-    margin-right:10px;
+    border-radius:10px;
+    border:2px solid white;
     object-fit:cover;
+    margin-right:15px;
 }
 
 .info p{
-    margin:4px 0;
-    font-size:14px;
+    margin:5px 0;
+    font-size:13px;
 }
 
 .footer-text{
-    margin-top:10px;
-    font-weight:bold;
-    text-align:center;
-    color:#006a4e;
-    font-size:16px;
+    position:absolute;
+    bottom:15px;
+    left:20px;
+    font-size:12px;
+    font-style:italic;
+    opacity:0.9;
 }
 
 .download-btn{
-    background:#f42a41;
+    margin-top:15px;
+    background:#ff9800;
 }
 </style>
 </head>
@@ -113,7 +116,7 @@ button{
 
 <div class="owner">Website Owner: তারিকুল</div>
 
-<h2>ফ্যামিলি কার্ড জেনারেটর</h2>
+<h2>Smart Family Card Generator</h2>
 
 <div class="container">
     <input type="text" id="name" placeholder="নাম">
@@ -125,8 +128,8 @@ button{
 </div>
 
 <div class="card" id="familyCard">
-    <div class="header">গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
-    <div class="sub-header">ফ্যামিলি কার্ড</div>
+    <div class="card-title">SMART FAMILY CARD</div>
+    <div class="card-number" id="cardNumber"></div>
 
     <div class="card-body">
         <img id="cardPhoto">
@@ -135,14 +138,13 @@ button{
             <p id="cardFather"></p>
             <p id="cardMother"></p>
             <p id="cardAddress"></p>
-            <p id="cardNumber"></p>
         </div>
     </div>
 
     <div class="footer-text">I Have A Plan</div>
-
-    <button class="download-btn" onclick="downloadCard()">ডাউনলোড করো</button>
 </div>
+
+<button class="download-btn" onclick="downloadCard()">ডাউনলোড করো</button>
 
 <script>
 function generateCard(){
@@ -150,20 +152,19 @@ function generateCard(){
     document.getElementById("familyCard").style.display="block";
 
     document.getElementById("cardName").innerText=
-    "নাম: "+document.getElementById("name").value;
+    "Name: "+document.getElementById("name").value;
 
     document.getElementById("cardFather").innerText=
-    "পিতা: "+document.getElementById("father").value;
+    "Father: "+document.getElementById("father").value;
 
     document.getElementById("cardMother").innerText=
-    "মাতা: "+document.getElementById("mother").value;
+    "Mother: "+document.getElementById("mother").value;
 
     document.getElementById("cardAddress").innerText=
-    "ঠিকানা: "+document.getElementById("address").value;
+    "Address: "+document.getElementById("address").value;
 
-    let randomNumber = "FC-2026-"+Math.floor(100+Math.random()*900);
-    document.getElementById("cardNumber").innerText=
-    "কার্ড নং: "+randomNumber;
+    let randomNumber = "SFC-"+Math.floor(100000+Math.random()*900000);
+    document.getElementById("cardNumber").innerText=randomNumber;
 
     let file=document.getElementById("photo").files[0];
     let reader=new FileReader();
@@ -180,7 +181,7 @@ function generateCard(){
 function downloadCard(){
     html2canvas(document.getElementById("familyCard")).then(canvas=>{
         let link=document.createElement("a");
-        link.download="family_card.png";
+        link.download="smart_family_card.png";
         link.href=canvas.toDataURL();
         link.click();
     });
